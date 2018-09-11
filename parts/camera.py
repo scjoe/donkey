@@ -14,10 +14,11 @@ class PiCamera(BaseCamera):
     def __init__(self, resolution=(120, 160), framerate=20):
         from picamera.array import PiRGBArray
         from picamera import PiCamera
-        resolution = (resolution[1], resolution[0])
         self.height=resolution[0]
         self.width=resolution[1]
-        self.croppixels=32
+
+        resolution = (resolution[1], resolution[0])
+        self.croppixels=40
         # initialize the camera and stream
         self.camera = PiCamera() #PiCamera gets resolution (height, width)
         self.camera.resolution = resolution
@@ -41,10 +42,10 @@ class PiCamera(BaseCamera):
         return cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
     def cropandpad(self, im):
-        #img_crop = im[self.croppixels:self.height, 0:self.width]
-        img_crop = im[32:120,0:160]
-        img = cv2.copyMakeBorder(img_crop, 32, 0, 0, 0, cv2.BORDER_CONSTANT, value=[0,0,0])
-        #img = cv2.copyMakeBorder(img_crop, self.croppixels, 0, 0, 0, cv2.BORDER_CONSTANT, value=[0,0,0])
+        img_crop = im[self.croppixels:self.height, 0:self.width]
+        # img_crop = im[32:120,0:160]
+        # img = cv2.copyMakeBorder(img_crop, 32, 0, 0, 0, cv2.BORDER_CONSTANT, value=[0,0,0])
+        img = cv2.copyMakeBorder(img_crop, self.croppixels, 0, 0, 0, cv2.BORDER_CONSTANT, value=[0,0,0])
         return img
 
     def run(self):
